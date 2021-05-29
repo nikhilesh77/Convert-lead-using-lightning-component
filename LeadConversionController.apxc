@@ -1,0 +1,48 @@
+public class LeadConversionController {
+   
+    @AuraEnabled
+    public static list<leadConversionWrapper> getLeadWithCheckbox(){
+        
+        list<Lead> leadObj =[SELECT id,Name,Email,phone,company,status FROM Lead WHERE IsConverted=false];
+        list<leadConversionWrapper> leadWrapper= new list<leadConversionWrapper>();
+        for(Lead i:leadObj){
+            
+            leadWrapper.add(new leadConversionWrapper(i)) ; 
+        }
+        
+        return leadWrapper;
+    }
+    
+   
+    @AuraEnabled
+    public static void convertSelectedLead(List<Lead> selectedLead, Boolean checkValue){
+        for(lead leadObj: selectedLead){
+            Database.LeadConvert lca = new Database.LeadConvert();
+            lca.setLeadId(leadObj.id);
+            
+            LeadStatus convertStatus = [SELECT Id, MasterLabel FROM LeadStatus WHERE IsConverted=true LIMIT 1];
+            
+            lca.setConvertedStatus(convertStatus.MasterLabel);
+            if(checkValue == true){
+                
+                lca.setDoNotCreateOpportunity(TRUE);
+            }
+            Database.LeadConvertResult lcr = Database.convertLead(lca);
+            
+        }     
+    }
+    
+    
+    //Wrapper class to hold lead with checkbox.
+   
+    Public class leadConversionWrapper{
+        @AuraEnabled
+        Public Lead leadObj;
+        @AuraEnabled
+        Public Boolean isBoolean;
+        public leadConversionWrapper(Lead leadObj){
+            this.leadObj = leadObj;
+            this.isBoolean = isBoolean;
+        }
+    }
+}
