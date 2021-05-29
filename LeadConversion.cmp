@@ -1,0 +1,74 @@
+<aura:component controller="LeadConversionController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <!-- 2.handler to call method "doInit" of jsCOntroller on loading of component. -->
+    <aura:handler name="init" value="{!this}" action="{!c.leadwithcheckbox}"/>
+    <!-- 1.attribute to store return value and show on component. -->
+    <aura:attribute name="leadWrapper" type="LeadConversionController.leadConversionWrapper[]" />
+    
+    <lightning:layout class="slds-page-header slds-page-header_object-home">
+        <lightning:layoutItem>
+            <lightning:icon iconName="standard:lead_list" alternativeText="LeadData"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="horizontal-small">
+            <h2 class="slds-text-heading_medium"><b>Lead Data</b></h2>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    <div>
+        <table class="slds-table slds-table--bordered slds-theme_backgroundColor-Body">
+            <!-- Table header -->
+            <thead>
+                
+                <tr class="slds-text-title--caps header slds-theme_backgroundColor-head">
+                    <td width="100"> <b>Select</b> </td>
+                    
+                    <td>
+                        
+                        <lightning:icon iconName="utility:user" size="xx-small"/>
+                         <b>Name</b> 
+                    </td>
+
+                    <td>  
+                        <lightning:icon iconName="utility:store" size="x-small"/><b>Company</b> 
+                        
+                    </td>
+                    <td>  <lightning:icon iconName="utility:email" size="x-small"/><b>Email</b>  </td>
+                    <td>  <lightning:icon iconName="utility:log_a_call" size="x-small"/><b>Phone</b> </td>
+                    <td>  <lightning:icon iconName="utility:mark_all_as_read" size="x-small"/><b>Status</b></td>
+                </tr>
+                
+            </thead>
+            <!-- Table body -->
+            <tbody>
+                <aura:iteration items="{!v.leadWrapper}" var="item">
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <Lightning:input type="Checkbox" aura:id="checkbox" checked="{!item.isBoolean}"/>
+                            </div>
+                        </td>
+                        <td><a target="_blank" href="{!v.url+'/'+ item.leadObj.Id}" style = "color:Blue">{!item.leadObj.Name}</a></td>
+                        <td>{!item.leadObj.Company}</td>
+                        <td>{!item.leadObj.Email}</td>
+                        <td>{!item.leadObj.Phone}</td>
+                        <td>{!item.leadObj.Status}</td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>  
+    </div>
+    <br/>
+    
+    
+     <lightning:layout horizontalAlign="center">
+            <lightning:layoutItem padding="around-small">
+                <Lightning:button variant="brand-outline" label="ConvertLeadToAccountandContact" onclick="{!c.convertLeadToAccountAndContact}"/>
+            </lightning:layoutItem >
+            <lightning:layoutItem padding="around-small">
+                <Lightning:button variant="brand-outline" label="Convert Lead" onclick="{!c.convertLead}"/>
+            </lightning:layoutItem>
+    </lightning:layout>
+    
+    
+    
+    
+</aura:component>
